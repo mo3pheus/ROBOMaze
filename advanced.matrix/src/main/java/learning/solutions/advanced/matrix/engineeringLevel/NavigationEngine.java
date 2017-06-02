@@ -72,6 +72,19 @@ public class NavigationEngine implements PerformsNavigation {
 		return calibratedPath;
 	}
 
+    public static List<Point> getAnimationCalibratedRobotPath(List<Point> robotPath, int animationStepSize) {
+        List<Point> calibratedPath = new ArrayList<Point>();
+        if (robotPath != null) {
+            for (int i = 0; i < robotPath.size() - 1; i++) {
+                Point start = robotPath.get(i);
+                Point end = robotPath.get(i + 1);
+                List<Point> tempPoints = AnimationUtil.generateRobotPositions(start, end, animationStepSize);
+                calibratedPath.addAll(tempPoints);
+            }
+        }
+        return calibratedPath;
+    }
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (Integer i : gridMap.keySet()) {
