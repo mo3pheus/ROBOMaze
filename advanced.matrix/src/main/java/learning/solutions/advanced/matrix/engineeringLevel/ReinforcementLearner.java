@@ -122,8 +122,7 @@ public class ReinforcementLearner {
                 RCell  temp = current.getRandomAction();
                 RCell  next = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
                 double maxQ = next.getBestAction().getqValue();
-                double newQValue = (1.0d - alpha) * current.getqValue() + alpha * (next.getReward() + gamma * maxQ -
-                        current.getqValue());
+                double newQValue = (1.0d - alpha) * current.getqValue() + alpha * (next.getReward() + gamma * maxQ);
                 temp.setqValue(newQValue);
 
                 captureExploration.add(next.getCenter());

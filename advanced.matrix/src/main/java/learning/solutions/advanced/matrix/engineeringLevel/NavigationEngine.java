@@ -65,7 +65,7 @@ public class NavigationEngine implements PerformsNavigation {
 			for (int i = 0; i < robotPath.size() - 1; i++) {
 				Point start = robotPath.get(i);
 				Point end = robotPath.get(i + 1);
-				List<Point> tempPoints = AnimationUtil.generateRobotPositions(start, end, animationStepSize);
+				List<Point> tempPoints = AnimationUtil.generateRobotPositions(start, end, 1);
 				calibratedPath.addAll(tempPoints);
 			}
 		}

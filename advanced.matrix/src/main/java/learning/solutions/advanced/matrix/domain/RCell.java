@@ -3,8 +3,7 @@ package learning.solutions.advanced.matrix.domain;
 /**
  * Created by sanketkorgaonkar on 6/2/17.
  */
-
-import java.awt.*;
+import java.awt.Point;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -34,6 +33,7 @@ public class RCell {
     private double  qValue        = 0.0d;
     private double  reward        = 0.0d;
     private RCell[] adjacentNodes = new RCell[Direction.values().length];
+    private double[] adjacentNodesQValues = new double[Direction.values().length];
 
     public RCell(Point center, int id, int cellWidth) {
         this.center = center;
@@ -92,6 +92,20 @@ public class RCell {
 
         return best;
     }
+    
+    public int getBestActionId() {
+        int best = 0;
+
+        double maxQ = RCell.REALLY_LOW_VALUE;
+        for (int i = 0; i < adjacentNodes.length; i++) {
+            if (adjacentNodesQValues[i] > maxQ) {
+                best = i;
+                maxQ = adjacentNodesQValues[i];
+            }
+        }
+
+        return best;
+    }
 
     public RCell getRandomAction() {
         int id    = ThreadLocalRandom.current().nextInt(0, Direction.values().length);
@@ -102,5 +116,49 @@ public class RCell {
         }
         return adjacentNodes[id];
     }
+    
+    public int getRandomActionId() {
+        int id    = ThreadLocalRandom.current().nextInt(0, Direction.values().length);
+        int tries = 0;
+        while (adjacentNodes[id] == null && tries < MAX_TRIES) {
+            id = ThreadLocalRandom.current().nextInt(0, Direction.values().length);
+            tries++;
+        }
+        return id;
+    }
+    
+    public RCell getState(int id) {
+    	return adjacentNodes[id];
+    }
+
+	public void initializeQValues(double qValue) {
+		for(int i = 0; i < adjacentNodes.length; i++) {
+			if (adjacentNodes[i] == null) {
+				adjacentNodesQValues[i] = RCell.REALLY_LOW_VALUE;
+			} else {
+				adjacentNodesQValues[i] = qValue;
+			}
+			
+		}
+	}
+	
+	public void setQvalueForAction(int id, double qValue) {
+		adjacentNodesQValues[id] = qValue;
+	}
+	
+	public double getQvalueForAction(int id) {
+		return adjacentNodesQValues[id];
+	}
+	
+	public double getMaxQvalue() {
+        double maxQ = RCell.REALLY_LOW_VALUE;
+        for (int i = 0; i < adjacentNodes.length; i++) {
+            if (adjacentNodesQValues[i] > maxQ) {
+            	maxQ = adjacentNodesQValues[i];
+            }
+        }
+
+        return maxQ;
+	}
 }
 

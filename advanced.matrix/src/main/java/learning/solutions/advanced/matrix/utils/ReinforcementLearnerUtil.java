@@ -29,12 +29,12 @@ public class ReinforcementLearnerUtil {
                     grid[i][j].setqValue(reward);
                     grid[i][j].setReward(reward);
                 }
-                for (RCell adNode : grid[i][j].getAdjacentNodes()) {
-                    if (adNode != null && adNode.getCenter().equals(destination.getCenter())) {
-                        adNode.setqValue(reward);
-                        adNode.setReward(reward);
-                    }
-                }
+//                for (RCell adNode : grid[i][j].getAdjacentNodes()) {
+//                    if (adNode != null && adNode.getCenter().equals(destination.getCenter())) {
+//                        adNode.setqValue(reward);
+//                        adNode.setReward(reward);
+//                    }
+//                }
             }
         }
     }
