@@ -91,4 +91,40 @@ public class NavUtil {
 
 		return minFId;
 	}
+
+	/**
+	 * Returns the directions of point2 with respect to point 1
+	 * @param lat1 : Latitude of point1 in degrees
+	 * @param long1 : Longitude of point1 in degrees
+	 * @param lat2 : Latitude of point2 in degrees
+	 * @param long2 : Longitude of point2 in degrees
+     * @return String (EAST, WEST, NORTH, SOUTH)
+	 *
+	 * φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
+	 * note that angles need to be in radians to pass to trig functions!
+	 * Δφ = (lat2-lat1).toRadians();
+	 * Δλ = (lon2-lon1).toRadians();
+	 * θ = atan2( sin Δλ ⋅ cos φ2 , cos φ1 ⋅ sin φ2 − sin φ1 ⋅ cos φ2 ⋅ cos Δλ )
+     */
+	public static final String getDirection(double lat1, double long1, double lat2, double long2) {
+		Double[] startCoordsInRads = new Double[]{Math.toRadians(lat1), Math.toRadians(long1)};
+		Double[] destCoordsInRads = new Double[]{Math.toRadians(lat2), Math.toRadians(long2)};
+
+		double bearing = Math.atan2(
+				Math.sin(destCoordsInRads[1] - startCoordsInRads[1]) * Math.cos(destCoordsInRads[0]),
+				Math.cos(startCoordsInRads[0]) * Math.sin(destCoordsInRads[0]) - Math.sin(startCoordsInRads[0]) * Math.cos(destCoordsInRads[0]) * Math.cos(destCoordsInRads[1] - startCoordsInRads[1])
+		);
+
+		double val = Math.toDegrees(bearing);
+
+		if (val < 45 && val >= -45) {
+			return "North";
+		} else if (val >= 45 && val < 135) {
+			return "East";
+		} else if (val >= 135 || val < -135) {
+			return "South";
+		}
+
+		return "West";
+	}
 }
