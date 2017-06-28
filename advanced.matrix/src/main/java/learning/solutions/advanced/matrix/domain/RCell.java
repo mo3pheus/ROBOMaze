@@ -12,6 +12,19 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class RCell {
 
+    public enum etlSchema {
+        MEAN_LAT(0), MEAN_LONG(1), STD_DEV_LAT(2), STD_DEV_LONG(3), CLASS_ID(4);
+        private final int value;
+
+        private etlSchema(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
     public enum Direction {
         NORTH(0), SOUTH(1), WEST(2), EAST(3);
         private final int value;
@@ -28,17 +41,44 @@ public class RCell {
     private static final double REALLY_LOW_VALUE = -99999.0d;
     private static final int    MAX_TRIES        = 100;
 
-    private Point   center        = null;
-    private int     cellWidth     = 0;
-    private int     id            = -1;
-    private double  qValue        = 0.0d;
-    private double  reward        = 0.0d;
+    private Point  center    = null;
+    private int    cellWidth = 0;
+    private int    id        = -1;
+    private double qValue    = 0.0d;
+    private double reward    = 0.0d;
+
+    private double meanLat    = 0.0d;
+    private double meanLong   = 0.0d;
+    private double stdDevLat  = 0.0d;
+    private double stdDevLong = 0.0d;
+
     private RCell[] adjacentNodes = new RCell[Direction.values().length];
+
+    private static String cleanString(String input) {
+        String[] meta = {"\\:", "Centroid", "\\[", "\\]", "StdDev", "ClassId", " "};
+        for (String s : meta) {
+            input = input.replaceAll(s, "");
+        }
+        return input;
+    }
 
     public RCell(Point center, int id, int cellWidth) {
         this.center = center;
         this.id = id;
         this.cellWidth = cellWidth;
+    }
+
+    public RCell(String cellString) throws Exception{
+        String   cleanedString = cleanString(cellString);
+        String[] parts         = cleanedString.split(",");
+
+        this.meanLat = Double.parseDouble(parts[etlSchema.MEAN_LAT.getValue()]);
+        this.meanLong = Double.parseDouble(parts[etlSchema.MEAN_LONG.getValue()]);
+        this.stdDevLat = Double.parseDouble(parts[etlSchema.STD_DEV_LAT.getValue()]);
+        this.stdDevLong = Double.parseDouble(parts[etlSchema.STD_DEV_LONG.getValue()]);
+        this.id = Integer.parseInt(parts[etlSchema.CLASS_ID.getValue()]);
+
+        this.center = new Point(0,0);
     }
 
     public double getqValue() {
@@ -75,7 +115,9 @@ public class RCell {
 
     public String toString() {
         String cellString = center.toString();
-        cellString += " Id = " + id + " qValue = " + qValue + " Reward = " + reward;
+        cellString += " Id = " + id + " qValue = " + qValue + " Reward = " + reward + " MeanLat = " + meanLat + " " +
+                "MeanLong = " + meanLong
+                + " stdDevLat = " + stdDevLat + " stdDevLong = " + stdDevLong;
         return cellString;
     }
 

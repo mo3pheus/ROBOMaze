@@ -12,10 +12,10 @@ import learning.solutions.advanced.matrix.utils.ReinforcementLearnerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Point;
-import java.util.concurrent.ThreadLocalRandom;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by sanket on 5/23/17.
@@ -25,8 +25,8 @@ public class ReinforcementLearner {
 
     private Logger logger = LoggerFactory.getLogger(ReinforcementLearner.class);
 
-    private Properties marsConfig = null;
-    private RCell[][]  navGrid    = null;
+    private Properties mazeDefinition = null;
+    private RCell[][]  navGrid        = null;
 
     private int lidarUsage       = 0;
     private int frameWidth       = 0;
@@ -36,6 +36,7 @@ public class ReinforcementLearner {
     private WallBuilder wallBuilder = null;
     private RCell       source      = null;
     private RCell       destination = null;
+    private RCell       altDest     = null;
 
     private double gamma         = 0.0d;
     private double alpha         = 0.0d;
@@ -44,19 +45,19 @@ public class ReinforcementLearner {
     private int    normalReward  = 0;
     private int    maxIterations = 0;
 
-    public ReinforcementLearner(Properties marsConfig) {
-        this.marsConfig = marsConfig;
+    public ReinforcementLearner(Properties mazeDefinition) {
+        this.mazeDefinition = mazeDefinition;
 
-        this.frameWidth = Integer.parseInt(marsConfig.getProperty(EnvironmentUtils.FRAME_WIDTH_PROPERTY));
-        this.cellWidth = Integer.parseInt(marsConfig.getProperty(EnvironmentUtils.CELL_WIDTH_PROPERTY));
-        this.wallBuilder = new WallBuilder(marsConfig);
+        this.frameWidth = Integer.parseInt(mazeDefinition.getProperty(EnvironmentUtils.FRAME_WIDTH_PROPERTY));
+        this.cellWidth = Integer.parseInt(mazeDefinition.getProperty(EnvironmentUtils.CELL_WIDTH_PROPERTY));
+        this.wallBuilder = new WallBuilder(mazeDefinition);
 
-        this.alpha = Double.parseDouble(marsConfig.getProperty(RL_ENGINE_PREFIX + ".discountRate"));
-        this.gamma = Double.parseDouble(marsConfig.getProperty(RL_ENGINE_PREFIX + ".stepSize"));
-        this.minReward = Integer.parseInt(marsConfig.getProperty(RL_ENGINE_PREFIX + ".minReward"));
-        this.maxIterations = Integer.parseInt(marsConfig.getProperty(RL_ENGINE_PREFIX + ".maxIterations"));
-        this.maxReward = Integer.parseInt(marsConfig.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
-        this.normalReward = Integer.parseInt(marsConfig.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
+        this.alpha = Double.parseDouble(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".discountRate"));
+        this.gamma = Double.parseDouble(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".stepSize"));
+        this.minReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".minReward"));
+        this.maxIterations = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxIterations"));
+        this.maxReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
+        this.normalReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
 
         populateGrid();
         configureAdjacency();
@@ -84,16 +85,22 @@ public class ReinforcementLearner {
         destination.setqValue(minReward);
 
         ReinforcementLearnerUtil.setDestinationReward(navGrid, destination, maxReward);
+        int altDestX = Integer.parseInt(mazeDefinition.getProperty("maze.environment.alternate.destination").split("," +
+                "")[0]);
+        int altDestY = Integer.parseInt(mazeDefinition.getProperty("maze.environment.alternate.destination").split("," +
+                "")[1]);
+        altDest = ReinforcementLearnerUtil.findPoint(new Point(altDestX, altDestY), navGrid);
+        ReinforcementLearnerUtil.setDestinationReward(navGrid, altDest, maxReward);
 
         for (int i = 0; i < maxIterations; i++) {
             RCell current = ReinforcementLearnerUtil.getRandomSource(navGrid);
             //episode
-            while (!current.equals(destination)) {
-                RCell  temp = current.getRandomAction();
-                RCell  next = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
-                double maxQ = next.getBestAction().getqValue();
-                double newQValue = (1.0d - alpha) * current.getqValue() + alpha * (next.getReward() + gamma * maxQ -
-                        current.getqValue());
+            //while (!current.equals(destination) || !current.equals(altDestRCell)) {
+            while (!current.equals(destination) || !current.equals(altDest)) {
+                RCell  temp      = current.getRandomAction();
+                RCell  next      = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
+                double maxQ      = next.getBestAction().getqValue();
+                double newQValue = (1.0d - alpha) * current.getqValue() + alpha * (next.getReward() + gamma * maxQ);
                 temp.setqValue(newQValue);
                 current = next;
                 explorationSteps++;
@@ -114,11 +121,17 @@ public class ReinforcementLearner {
         destination.setqValue(maxReward);
 
         ReinforcementLearnerUtil.setDestinationReward(navGrid, destination, maxReward);
+        int altDestX = Integer.parseInt(mazeDefinition.getProperty("maze.environment.alternate.destination").split("," +
+                "")[0]);
+        int altDestY = Integer.parseInt(mazeDefinition.getProperty("maze.environment.alternate.destination").split("," +
+                "")[1]);
+        altDest = ReinforcementLearnerUtil.findPoint(new Point(altDestX, altDestY), navGrid);
+        ReinforcementLearnerUtil.setDestinationReward(navGrid, altDest, maxReward);
 
         for (int i = 0; i < maxIterations; i++) {
             RCell current = ReinforcementLearnerUtil.getRandomSource(navGrid);
             //episode
-            while (!current.equals(destination)) {
+            while (!current.equals(destination) && !current.equals(altDest)) {
                 RCell  temp = current.getRandomAction();
                 RCell  next = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
                 double maxQ = next.getBestAction().getqValue();
@@ -145,7 +158,7 @@ public class ReinforcementLearner {
                 shortestPath.add(temp.getCenter());
             }
 
-            if (temp.equals(destination)) {
+            if (temp.equals(destination) || temp.equals(altDest)) {
                 return shortestPath;
             }
 
@@ -157,6 +170,7 @@ public class ReinforcementLearner {
                 logger.error(" Could not find path between " + source.toString() + " and " + destination.toString());
                 return shortestPath;
             }
+            System.out.println("i = " + i);
         }
     }
 
@@ -220,7 +234,7 @@ public class ReinforcementLearner {
         for (int i = 0; i < navGrid[0].length; i++) {
             for (int j = 0; j < navGrid[0].length; j++) {
                 RCell               current             = navGrid[i][j];
-                AdjacencyCalculator adjacencyCalculator = new AdjacencyCalculator(current.getCenter(), marsConfig);
+                AdjacencyCalculator adjacencyCalculator = new AdjacencyCalculator(current.getCenter(), mazeDefinition);
                 adjacencyCalculator.setrGridMap(navGrid);
                 current.setAdjacentNodes(adjacencyCalculator.getAdjacentRNodes());
             }

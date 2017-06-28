@@ -52,7 +52,7 @@ public class LayeredAnimationEngine {
 		for (Point position : robotPositions) {
 			Cell robo = new Cell(matrixConfig);
 			robo.setLocation(position);
-			robo.setCellWidth(14);
+			robo.setCellWidth(12);
 			robo.setColor(EnvironmentUtils.findColor(matrixConfig.getProperty(EnvironmentUtils.ROBOT_COLOR)));
 			contentPane.add(robo, ROBOT_DEPTH);
 			frame.setContentPane(contentPane);
