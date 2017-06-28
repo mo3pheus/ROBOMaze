@@ -26,7 +26,6 @@ public class ETLTest {
                 System.out.println(rCell);
                 centroidString = bufferedReader.readLine();
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
