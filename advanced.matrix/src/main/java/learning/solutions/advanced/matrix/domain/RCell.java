@@ -81,6 +81,38 @@ public class RCell {
         this.center = new Point(0,0);
     }
 
+    public double getMeanLat() {
+        return meanLat;
+    }
+
+    public void setMeanLat(double meanLat) {
+        this.meanLat = meanLat;
+    }
+
+    public double getMeanLong() {
+        return meanLong;
+    }
+
+    public void setMeanLong(double meanLong) {
+        this.meanLong = meanLong;
+    }
+
+    public double getStdDevLat() {
+        return stdDevLat;
+    }
+
+    public void setStdDevLat(double stdDevLat) {
+        this.stdDevLat = stdDevLat;
+    }
+
+    public double getStdDevLong() {
+        return stdDevLong;
+    }
+
+    public void setStdDevLong(double stdDevLong) {
+        this.stdDevLong = stdDevLong;
+    }
+
     public double getqValue() {
         return qValue;
     }
