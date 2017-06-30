@@ -14,13 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by sanket on 5/23/17.
  */
-public class ReinforcementLearner {
+public class ReinforcementLearner extends Observable{
     public static final String RL_ENGINE_PREFIX = "mars.rover.rlEngine";
 
     private Logger logger = LoggerFactory.getLogger(ReinforcementLearner.class);
@@ -108,6 +109,7 @@ public class ReinforcementLearner {
             System.out.println("Reinforcement Learning progress = " + (i + 1) + "%");
         }
         logger.info(" rlEngine logging totalExplorationSteps = " + explorationSteps);
+        this.notifyObservers();
     }
 
     @Deprecated
@@ -146,6 +148,7 @@ public class ReinforcementLearner {
             System.out.println("Reinforcement Learning progress = " + (i + 1) + "%");
         }
         logger.info(" rlEngine logging totalExplorationSteps = " + explorationSteps);
+        this.notifyObservers();
     }
 
     public java.util.List<Point> getShortestPath() {

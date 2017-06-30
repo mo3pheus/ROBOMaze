@@ -35,6 +35,7 @@ public class MatrixCreation {
         java.util.List<Point> captureExploration = new ArrayList<>();
         ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig());
         learner.configureLearner(0.4d, 0.99d);
+
         int sourceX = Integer
                 .parseInt(matrixConfig.getProperty(EnvironmentUtils.ROBOT_START_LOCATION).split(",")[0]);
         int sourceY = Integer
