@@ -4,6 +4,8 @@ package learning.solutions.advanced.matrix.domain;
  * Created by sanketkorgaonkar on 6/2/17.
  */
 
+import learning.solutions.advanced.matrix.utils.LatLongID;
+
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -49,8 +51,18 @@ public class RCell {
 
     private double meanLat    = 0.0d;
     private double meanLong   = 0.0d;
+
+    public double getMeanLat() {
+        return meanLat;
+    }
+
+    public double getMeanLong() {
+        return meanLong;
+    }
+
     private double stdDevLat  = 0.0d;
     private double stdDevLong = 0.0d;
+    private LatLongID latLongIdentifier = null;
 
     private RCell[] adjacentNodes = new RCell[Direction.values().length];
 
@@ -81,6 +93,7 @@ public class RCell {
         this.center = new Point(0,0);
     }
 
+<<<<<<< HEAD
     public double getMeanLat() {
         return meanLat;
     }
@@ -112,6 +125,16 @@ public class RCell {
     public void setStdDevLong(double stdDevLong) {
         this.stdDevLong = stdDevLong;
     }
+=======
+    public RCell(Double latitude, Double longitude, LatLongID latLongIdentifier, int id) {
+        this.meanLat = latitude;
+        this.meanLong = longitude;
+        this.latLongIdentifier = latLongIdentifier;
+        this.id = id;
+        this.center = new Point(0,0);
+    }
+
+>>>>>>> add adjacency matrix calculation
 
     public double getqValue() {
         return qValue;
@@ -143,6 +166,14 @@ public class RCell {
 
     public void setReward(double reward) {
         this.reward = reward;
+    }
+
+    public LatLongID getLatLongIdentifier() {
+        return latLongIdentifier;
+    }
+
+    public void setLatLongIdentifier(LatLongID latLongIdentifier) {
+        this.latLongIdentifier = latLongIdentifier;
     }
 
     public String toString() {

@@ -60,6 +60,26 @@ public class ReinforcementLearner extends Observable{
         this.maxReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
         this.normalReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
 
+        String path = "/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt";
+
+        populateGridWithEtl(path);
+        configureAdjacency();
+    }
+
+    public ReinforcementLearner(Properties mazeDefinition, boolean WITH_ETL) {
+        this.mazeDefinition = mazeDefinition;
+
+        this.frameWidth = Integer.parseInt(mazeDefinition.getProperty(EnvironmentUtils.FRAME_WIDTH_PROPERTY));
+        this.cellWidth = Integer.parseInt(mazeDefinition.getProperty(EnvironmentUtils.CELL_WIDTH_PROPERTY));
+        this.wallBuilder = new WallBuilder(mazeDefinition);
+
+        this.alpha = Double.parseDouble(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".discountRate"));
+        this.gamma = Double.parseDouble(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".stepSize"));
+        this.minReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".minReward"));
+        this.maxIterations = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxIterations"));
+        this.maxReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
+        this.normalReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
+
         populateGrid();
         configureAdjacency();
     }
@@ -202,6 +222,25 @@ public class ReinforcementLearner extends Observable{
     }
 
     private void populateGrid() {
+        int numCells = frameWidth / cellWidth;
+        navGrid = new RCell[numCells][numCells];
+
+        int id = 0;
+        for (int i = 0; i < numCells; i++) {
+            for (int j = 0; j < numCells; j++) {
+                Point point = new Point(i * cellWidth, j * cellWidth);
+                navGrid[i][j] = new RCell(point, id++, cellWidth);
+
+                if (intersects(navGrid[i][j])) {
+                    navGrid[i][j].setReward(minReward);
+                } else {
+                    navGrid[i][j].setReward(normalReward);
+                }
+            }
+        }
+    }
+
+    private void populateGridWithEtl(String pathToDataFile) {
         int numCells = frameWidth / cellWidth;
         navGrid = new RCell[numCells][numCells];
 
