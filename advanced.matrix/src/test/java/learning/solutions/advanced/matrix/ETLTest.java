@@ -1,7 +1,5 @@
 package learning.solutions.advanced.matrix;
 
-import com.spatial4j.core.distance.DistanceUtils;
-import com.spatial4j.core.distance.GeodesicSphereDistCalc;
 import learning.solutions.advanced.matrix.domain.RCell;
 import learning.solutions.advanced.matrix.utils.LatLongID;
 import net.sf.geographiclib.Geodesic;
@@ -20,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.spatial4j.core.distance.DistanceUtils.EARTH_EQUATORIAL_RADIUS_KM;
-import static com.spatial4j.core.distance.DistanceUtils.distVincentyRAD;
-
 /**
  * Created by sanketkorgaonkar on 6/27/17.
  */
@@ -31,32 +26,20 @@ public class ETLTest {
     static List<RCell> rCellGrid = new ArrayList<>();
 
     public static void main(String[] args) {
-<<<<<<< HEAD
-        GeodesicSphereDistCalc.Vincenty vincenty = new GeodesicSphereDistCalc.Vincenty();
-        int                             i        = 0;
-        List<RCell>                     grid     = new ArrayList<>();
-=======
         loadData();
     }
 
-
     public static RCell[][] loadData() {
         int i = 0;
->>>>>>> add adjacency matrix calculation
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File
                 ("/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt")))) {
             String centroidString = bufferedReader.readLine();
             while (centroidString != null) {
                 RCell rCell = new RCell(centroidString);
-<<<<<<< HEAD
-                grid.add(rCell);
-                /*System.out.println(" Iteration number = " + i++);
-=======
                 rCellGrid.add(rCell);
                 System.out.println(" Iteration number = " + i++);
->>>>>>> add adjacency matrix calculation
                 System.out.println(centroidString);
-                System.out.println(rCell);*/
+                System.out.println(rCell);
                 centroidString = bufferedReader.readLine();
             }
 
@@ -69,21 +52,7 @@ public class ETLTest {
             e.printStackTrace();
         }
 
-<<<<<<< HEAD
-        for (int j = 0; j < grid.size() - 1; j++) {
-            RCell a = grid.get(j);
-            RCell b = grid.get(j + 1);
-
-            double dist = distVincentyRAD(Math.toRadians(a.getMeanLat()), Math.toRadians(a.getMeanLong()),
-                    Math.toRadians(b.getMeanLat()), Math.toRadians(b.getMeanLong()));
-
-            dist = DistanceUtils.radians2Dist(dist,EARTH_EQUATORIAL_RADIUS_KM );
-            System.out.println("From " + a.toString() + " to " + b.toString() + " = " + dist);
-            System.out.println("====================================================");
-        }
-=======
         throw new RuntimeException("This is not supposed to happen!! ");
->>>>>>> add adjacency matrix calculation
     }
 
     private static String cleanString(String input) {
