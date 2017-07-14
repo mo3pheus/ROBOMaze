@@ -1,0 +1,2 @@
+1    [main] INFO  learning.solutions.advanced.matrix.engineeringLevel.ReinforcementLearner  -  rlEngine training triggered at SCET = 1496696335779 source = java.awt.Point[x=550,y=150] destination = java.awt.Point[x=350,y=450]
+151  [main] INFO  learning.solutions.advanced.matrix.engineeringLevel.ReinforcementLearner  -  rlEngine logging totalExplorationSteps = 162021

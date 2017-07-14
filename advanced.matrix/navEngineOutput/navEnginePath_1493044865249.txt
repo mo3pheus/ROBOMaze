@@ -1,0 +1,63 @@
+10536 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], begin registering consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 in ZK
+10572 [Thread-0] INFO  kafka.utils.ZKCheckedEphemeral  - Creating /consumers/test-coms-zion-controlRoom/ids/test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 (is it secure? false)
+10584 [Thread-0] INFO  kafka.utils.ZKCheckedEphemeral  - Result of znode creation is: OK
+10584 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], end registering consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 in ZK
+10589 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835_watcher_executor] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], starting watcher executor thread for consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835
+10608 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], begin rebalancing consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 try #0
+10715 [Thread-0] INFO  kafka.consumer.ConsumerFetcherManager  - [ConsumerFetcherManager-1493044865238] Stopping leader finder thread
+10716 [Thread-0] INFO  kafka.consumer.ConsumerFetcherManager  - [ConsumerFetcherManager-1493044865238] Stopping all fetchers
+10717 [Thread-0] INFO  kafka.consumer.ConsumerFetcherManager  - [ConsumerFetcherManager-1493044865238] All connections stopped
+10718 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], Cleared all relevant queues for this fetcher
+10719 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], Cleared the data chunks in all the consumer message iterators
+10719 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], Committing all offsets after clearing the fetcher queues
+10721 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], Releasing partition ownership
+10745 [Thread-0] INFO  kafka.consumer.RangeAssignor  - Consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 rebalancing the following partitions: ArrayBuffer(0) for topic nebuchadnezzar.main.deck.com.2 with consumers: List(test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-0)
+10746 [Thread-0] INFO  kafka.consumer.RangeAssignor  - test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-0 attempting to claim partition 0
+10772 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-0 successfully owned partition 0 for topic nebuchadnezzar.main.deck.com.2
+10789 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], Consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 selected partitions : nebuchadnezzar.main.deck.com.2:0: fetched offset = 14476: consumed offset = 14476
+10790 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.consumer.ConsumerFetcherManager$LeaderFinderThread  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread], Starting 
+10790 [Thread-0] INFO  kafka.consumer.ZookeeperConsumerConnector  - [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835], end rebalancing consumer test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835 try #0
+10805 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.utils.VerifiableProperties  - Verifying properties
+10806 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.utils.VerifiableProperties  - Property client.id is overridden to test-coms-zion-controlRoom
+10806 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.utils.VerifiableProperties  - Property metadata.broker.list is overridden to 10.36.201.254:9092
+10806 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.utils.VerifiableProperties  - Property request.timeout.ms is overridden to 30000
+10822 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.client.ClientUtils$  - Fetching metadata from broker BrokerEndPoint(0,10.36.201.254,9092) with correlation id 0 for 1 topic(s) Set(nebuchadnezzar.main.deck.com.2)
+10828 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.producer.SyncProducer  - Connected to 10.36.201.254:9092 for producing
+10842 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.producer.SyncProducer  - Disconnecting from 10.36.201.254:9092
+10859 [ConsumerFetcherThread-test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-0-0] INFO  kafka.consumer.ConsumerFetcherThread  - [ConsumerFetcherThread-test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-0-0], Starting 
+10862 [test-coms-zion-controlRoom_Sankets-MacBook-Pro.local-1493044860103-21613835-leader-finder-thread] INFO  kafka.consumer.ConsumerFetcherManager  - [ConsumerFetcherManager-1493044865238] Added fetcher for partitions ArrayBuffer([[nebuchadnezzar.main.deck.com.2,0], initOffset 14476 to broker BrokerEndPoint(0,10.36.201.254,9092)] )
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=150,y=150]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=150,y=125]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=150,y=100]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=150,y=75]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=125,y=75]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=100,y=75]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=75]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=100]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=125]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=150]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=175]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=200]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=75,y=225]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=100,y=225]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=125,y=225]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=150,y=225]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=225]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=250]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=275]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=300]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=325]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=350]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=375]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=400]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=425]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=450]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=175,y=475]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=200,y=475]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=225,y=475]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=225,y=450]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=250,y=450]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=275,y=450]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=300,y=450]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=325,y=450]
+27207 [Thread-0] INFO  learning.solutions.advanced.matrix.engineeringLevel.NavigationEngine  - navEnginePosn :: java.awt.Point[x=350,y=450]
