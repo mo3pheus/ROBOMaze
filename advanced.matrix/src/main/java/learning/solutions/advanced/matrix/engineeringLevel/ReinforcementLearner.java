@@ -236,7 +236,7 @@ public class ReinforcementLearner extends Observable{
 
     private void populateGrid() {
         int numCells = frameWidth / cellWidth;
-        navGrid = new RCell[numCells][numCells];
+//        navGrid =
 
         int id = 0;
         for (int i = 0; i < numCells; i++) {
