@@ -33,7 +33,9 @@ public class MatrixCreation {
 //        new MatrixArchitect(getMatrixConfig(), navEngine.getAnimationCalibratedRobotPath());
 
         java.util.List<Point> captureExploration = new ArrayList<>();
-        ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig());
+//        ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig());
+
+        ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig(), true);
         learner.configureLearner(0.4d, 0.99d);
 
         int sourceX = Integer
