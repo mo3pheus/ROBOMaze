@@ -93,17 +93,9 @@ public class RCell {
         this.center = new Point(0,0);
     }
 
-<<<<<<< HEAD
-    public double getMeanLat() {
-        return meanLat;
-    }
 
     public void setMeanLat(double meanLat) {
         this.meanLat = meanLat;
-    }
-
-    public double getMeanLong() {
-        return meanLong;
     }
 
     public void setMeanLong(double meanLong) {
@@ -125,7 +117,7 @@ public class RCell {
     public void setStdDevLong(double stdDevLong) {
         this.stdDevLong = stdDevLong;
     }
-=======
+
     public RCell(Double latitude, Double longitude, LatLongID latLongIdentifier, int id) {
         this.meanLat = latitude;
         this.meanLong = longitude;
@@ -133,8 +125,6 @@ public class RCell {
         this.id = id;
         this.center = new Point(0,0);
     }
-
->>>>>>> add adjacency matrix calculation
 
     public double getqValue() {
         return qValue;
