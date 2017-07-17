@@ -76,28 +76,15 @@ public class ReinforcementLearner extends Observable{
         return lidarUsage;
     }
 
-    public void train(Point source, Point dest) {
+    public void train(Point source) {
         logger.info(" rlEngine training triggered at SCET = " + System.currentTimeMillis() + " source = " + source
-                .toString() + " destination = " + dest.toString());
-        this.destination = ReinforcementLearnerUtil.findPoint(dest, navGrid);
+                .toString());
         this.source = ReinforcementLearnerUtil.findPoint(source, navGrid);
-
-        destination.setReward(maxReward);
-        destination.setqValue(minReward);
-
-        ReinforcementLearnerUtil.setDestinationReward(navGrid, destination, maxReward);
-        int altDestX = Integer.parseInt(mazeDefinition.getProperty("maze.environment.alternate.destination").split("," +
-                "")[0]);
-        int altDestY = Integer.parseInt(mazeDefinition.getProperty("maze.environment.alternate.destination").split("," +
-                "")[1]);
-        altDest = ReinforcementLearnerUtil.findPoint(new Point(altDestX, altDestY), navGrid);
-        ReinforcementLearnerUtil.setDestinationReward(navGrid, altDest, maxReward);
 
         for (int i = 0; i < maxIterations; i++) {
             RCell current = ReinforcementLearnerUtil.getRandomSource(navGrid);
             //episode
-            //while (!current.equals(destination) || !current.equals(altDestRCell)) {
-            while (!current.equals(destination) || !current.equals(altDest)) {
+            while (!(current.getReward() >= maxReward)) {
                 RCell  temp      = current.getRandomAction();
                 RCell  next      = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
                 double maxQ      = next.getBestAction().getqValue();
@@ -161,7 +148,7 @@ public class ReinforcementLearner extends Observable{
                 shortestPath.add(temp.getCenter());
             }
 
-            if (temp.equals(destination) || temp.equals(altDest)) {
+            if (temp.getReward() >= maxReward) {
                 return shortestPath;
             }
 
@@ -170,7 +157,7 @@ public class ReinforcementLearner extends Observable{
             i++;
 
             if (i == maxIterations * 10) {
-                logger.error(" Could not find path between " + source.toString() + " and " + destination.toString());
+                logger.error(" Could not find path between " + source.toString() + " and destination");
                 return shortestPath;
             }
             System.out.println("i = " + i);
