@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
@@ -46,6 +47,12 @@ public class ReinforcementLearner extends Observable{
     private int    normalReward  = 0;
     private int    maxIterations = 0;
 
+//    private final String path = "/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt";
+
+    private final String path = null; // TODO: Update path
+    private final int RCELL_ROWS = 20;
+    private final int RCELL_COLUMNS = 20;
+
     public ReinforcementLearner(Properties mazeDefinition) {
         this.mazeDefinition = mazeDefinition;
 
@@ -60,9 +67,7 @@ public class ReinforcementLearner extends Observable{
         this.maxReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
         this.normalReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
 
-        String path = "/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt";
-
-        populateGridWithEtl(path);
+        populateGrid();
         configureAdjacency();
     }
 
@@ -80,8 +85,8 @@ public class ReinforcementLearner extends Observable{
         this.maxReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
         this.normalReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
 
-        populateGrid();
-        configureAdjacency();
+        Objects.requireNonNull(path, "Assign the path that refers to the location of the Cluster File !!!");
+        populateGridWithEtl(path, RCELL_ROWS, RCELL_COLUMNS);
     }
 
     public WallBuilder getWallBuilder() {
@@ -240,23 +245,8 @@ public class ReinforcementLearner extends Observable{
         }
     }
 
-    private void populateGridWithEtl(String pathToDataFile) {
-        int numCells = frameWidth / cellWidth;
-        navGrid = new RCell[numCells][numCells];
-
-        int id = 0;
-        for (int i = 0; i < numCells; i++) {
-            for (int j = 0; j < numCells; j++) {
-                Point point = new Point(i * cellWidth, j * cellWidth);
-                navGrid[i][j] = new RCell(point, id++, cellWidth);
-
-                if (intersects(navGrid[i][j])) {
-                    navGrid[i][j].setReward(minReward);
-                } else {
-                    navGrid[i][j].setReward(normalReward);
-                }
-            }
-        }
+    private void populateGridWithEtl(String pathToDataFile, final int RCELL_ROWS, final int RCELL_COLUMNS) {
+        navGrid = ReinforcementLearnerUtil.loadData(pathToDataFile, RCELL_ROWS, RCELL_COLUMNS);
     }
 
     private void configureAdjacency() {

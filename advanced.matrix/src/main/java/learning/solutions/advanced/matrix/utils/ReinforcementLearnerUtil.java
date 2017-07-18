@@ -125,12 +125,11 @@ public class ReinforcementLearnerUtil {
         return best;
     }
 
-    public static RCell[][] loadData( final int RCELL_ROWS, final int RCELL_COLUMNS) {
+    public static RCell[][] loadData(final String pathToClusterFile, final int RCELL_ROWS, final int RCELL_COLUMNS) {
         int i = 0;
         java.util.List<RCell> rCellGrid = new ArrayList<>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File
-                ("/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt")))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(pathToClusterFile)))) {
             String centroidString = bufferedReader.readLine();
             while (centroidString != null) {
                 RCell rCell = new RCell(centroidString);
@@ -158,8 +157,6 @@ public class ReinforcementLearnerUtil {
         final Double SOUTH = 180.0;
 
         final Double PER_MILE = 1609.344;
-
-        RCell[] closestNodesArray = new RCell[4];
 
         Double minLat = Double.MAX_VALUE, minLong = Double.MAX_VALUE;
         Double maxLat = Double.MIN_VALUE, maxLong = Double.MIN_VALUE;
@@ -249,7 +246,7 @@ public class ReinforcementLearnerUtil {
         Random random = new Random();
         int randomNumber = 10000;
         int id = randomNumber;
-//        for (int i = size-1; i >= 0; i--) {
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 LatLongID xCoOrdinate = xList.get(j);
