@@ -13,12 +13,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -125,11 +120,11 @@ public class ReinforcementLearnerUtil {
         return best;
     }
 
-    public static RCell[][] loadData(final String pathToClusterFile, final int RCELL_ROWS, final int RCELL_COLUMNS) {
-        int i = 0;
+    public static RCell[][] loadData(final File clusterFile, final int RCELL_ROWS, final int RCELL_COLUMNS) {
+        int                   i         = 0;
         java.util.List<RCell> rCellGrid = new ArrayList<>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(pathToClusterFile)))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(clusterFile))) {
             String centroidString = bufferedReader.readLine();
             while (centroidString != null) {
                 RCell rCell = new RCell(centroidString);
@@ -152,8 +147,8 @@ public class ReinforcementLearnerUtil {
 
         // [0] - NORTH, [1] - EAST, [2] - SOUTH, [3] - WEST
         final Double NORTH = 0.0;
-        final Double EAST = 90.0;
-        final Double WEST = 270.0;
+        final Double EAST  = 90.0;
+        final Double WEST  = 270.0;
         final Double SOUTH = 180.0;
 
         final Double PER_MILE = 1609.344;
@@ -183,19 +178,20 @@ public class ReinforcementLearnerUtil {
 
         }
 
-        System.out.println(String.format("[minLat = %f, minLong = %f] [maxLat = %f, maxLong = %f]", minLat, minLong, maxLat, maxLong));
+        System.out.println(String.format("[minLat = %f, minLong = %f] [maxLat = %f, maxLong = %f]", minLat, minLong,
+                maxLat, maxLong));
         GeodesicData widthGeodesic = Geodesic.WGS84.Inverse(minLat, minLong, minLat, maxLong,
                 GeodesicMask.DISTANCE);
 
         GeodesicData heightGeodesic = Geodesic.WGS84.Inverse(minLat, minLong, maxLat, minLong,
                 GeodesicMask.DISTANCE);
 
-        Double width = widthGeodesic.s12;
+        Double width  = widthGeodesic.s12;
         Double height = heightGeodesic.s12;
         System.out.println("Width: " + width / PER_MILE);
         System.out.println("Height: " + height / PER_MILE);
 
-        Double unitWidth = Math.floor(width / RCELL_ROWS);
+        Double unitWidth  = Math.floor(width / RCELL_ROWS);
         Double unitHeight = Math.floor(height / RCELL_COLUMNS);
 
         // Build the width section of the matrix
@@ -239,13 +235,13 @@ public class ReinforcementLearnerUtil {
         }
 
 
-        int size = xList.size();
-        RCell[][] toReturn = new RCell[size][size];
+        int                size       = xList.size();
+        RCell[][]          toReturn   = new RCell[size][size];
         Map<String, RCell> idrCellMap = new HashMap<>();
 
-        Random random = new Random();
-        int randomNumber = 10000;
-        int id = randomNumber;
+        Random random       = new Random();
+        int    randomNumber = 10000;
+        int    id           = randomNumber;
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -253,10 +249,11 @@ public class ReinforcementLearnerUtil {
                 LatLongID yCoOrdinate = yList.get(i);
 
                 Double longitude = xCoOrdinate.getLongitude();
-                Double latitude = yCoOrdinate.getLatitude();
-                String ID = yCoOrdinate.getIdentifier() + xCoOrdinate.getIdentifier();
+                Double latitude  = yCoOrdinate.getLatitude();
+                String ID        = yCoOrdinate.getIdentifier() + xCoOrdinate.getIdentifier();
 
-                LatLongID currentLatLongID = new LatLongID(latitude, longitude, xCoOrdinate.getPrefix(), xCoOrdinate.getIndex()
+                LatLongID currentLatLongID = new LatLongID(latitude, longitude, xCoOrdinate.getPrefix(), xCoOrdinate
+                        .getIndex()
                         , yCoOrdinate.getPrefix(), yCoOrdinate.getIndex(), ID);
 
                 RCell currentRcell = new RCell(latitude, longitude, currentLatLongID, id);
@@ -268,24 +265,27 @@ public class ReinforcementLearnerUtil {
             }
         }
 
-        System.out.println("------------------------------------------------ PRINTING THE MATRIX ------------------------------------------------");
-        for (int i = size-1; i >= 0; i--) {
+        System.out.println("------------------------------------------------ PRINTING THE MATRIX " +
+                "------------------------------------------------");
+        for (int i = size - 1; i >= 0; i--) {
             System.out.println();
             for (int j = 0; j < size; j++) {
                 System.out.print("|");
                 System.out.print(" ");
-                System.out.print(toReturn[i][j].getLatLongIdentifier().getIdentifier() + ", " + toReturn[i][j].getId()+","+i+"-"+j);
+                System.out.print(toReturn[i][j].getLatLongIdentifier().getIdentifier() + ", " + toReturn[i][j].getId
+                        () + "," + i + "-" + j);
                 System.out.print(" ");
             }
             System.out.print("|");
             System.out.println();
         }
-        System.out.println("------------------------------------------------ END OF MATRIX ------------------------------------------------");
+        System.out.println("------------------------------------------------ END OF MATRIX " +
+                "------------------------------------------------");
 
         // Compute adjacency!
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                RCell currentRcell = toReturn[i][j];
+                RCell     currentRcell      = toReturn[i][j];
                 LatLongID currentIdentifier = currentRcell.getLatLongIdentifier();
 
                 String newIdentifier = null;
@@ -293,7 +293,8 @@ public class ReinforcementLearnerUtil {
                 // Identify the node EAST of the rCell -- Increment x-index by 1
                 int newPositiveXIndex = currentIdentifier.getxIndex();
                 newPositiveXIndex++;
-                newIdentifier = ""+ currentIdentifier.getyPrefix() + currentIdentifier.getyIndex() + currentIdentifier.getxPrefix() + newPositiveXIndex;
+                newIdentifier = "" + currentIdentifier.getyPrefix() + currentIdentifier.getyIndex() +
+                        currentIdentifier.getxPrefix() + newPositiveXIndex;
                 RCell eastRcellNode = idrCellMap.get(newIdentifier);
                 currentRcell.getAdjacentNodes()[RCell.Direction.EAST.getValue()] = eastRcellNode;
 
@@ -301,7 +302,8 @@ public class ReinforcementLearnerUtil {
                 // Identify the node WEST of the rCell -- Increment x-index by 1
                 int newNegativeXIndex = currentIdentifier.getxIndex();
                 newNegativeXIndex--;
-                newIdentifier = ""+ currentIdentifier.getyPrefix() + currentIdentifier.getyIndex() + currentIdentifier.getxPrefix() + newNegativeXIndex;
+                newIdentifier = "" + currentIdentifier.getyPrefix() + currentIdentifier.getyIndex() +
+                        currentIdentifier.getxPrefix() + newNegativeXIndex;
                 RCell westRcellNode = idrCellMap.get(newIdentifier);
                 currentRcell.getAdjacentNodes()[RCell.Direction.WEST.getValue()] = westRcellNode;
 
@@ -309,7 +311,8 @@ public class ReinforcementLearnerUtil {
                 // Identify the node NORTH of the rCell -- Increment x-index by 1
                 int newPositiveYIndex = currentIdentifier.getyIndex();
                 newPositiveYIndex++;
-                newIdentifier = ""+ currentIdentifier.getyPrefix() + newPositiveYIndex + currentIdentifier.getxPrefix() + currentIdentifier.getxIndex();
+                newIdentifier = "" + currentIdentifier.getyPrefix() + newPositiveYIndex + currentIdentifier
+                        .getxPrefix() + currentIdentifier.getxIndex();
                 RCell northRcellNode = idrCellMap.get(newIdentifier);
                 currentRcell.getAdjacentNodes()[RCell.Direction.NORTH.getValue()] = northRcellNode;
 
@@ -317,7 +320,8 @@ public class ReinforcementLearnerUtil {
                 // Identify the node SOUTH of the rCell -- Increment x-index by 1
                 int newNegativeYIndex = currentIdentifier.getyIndex();
                 newNegativeYIndex--;
-                newIdentifier = ""+ currentIdentifier.getyPrefix() + newNegativeYIndex + currentIdentifier.getxPrefix() + currentIdentifier.getxIndex();
+                newIdentifier = "" + currentIdentifier.getyPrefix() + newNegativeYIndex + currentIdentifier
+                        .getxPrefix() + currentIdentifier.getxIndex();
                 RCell southRcellNode = idrCellMap.get(newIdentifier);
                 currentRcell.getAdjacentNodes()[RCell.Direction.SOUTH.getValue()] = southRcellNode;
 
@@ -344,20 +348,21 @@ public class ReinforcementLearnerUtil {
     }
 
     public static int findNearestRCell(RCell[][] navGrid, Double inputLat, Double inputLong) throws Exception {
-        int size = navGrid.length;
+        int    size            = navGrid.length;
         Double minimumDistance = Double.MAX_VALUE;
-        RCell nearestCell = null;
+        RCell  nearestCell     = null;
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                RCell currentRCell =  navGrid[i][j];
+                RCell currentRCell = navGrid[i][j];
 
-                GeodesicData geodesicData = Geodesic.WGS84.Inverse(currentRCell.getMeanLat(), currentRCell.getMeanLong(),
+                GeodesicData geodesicData = Geodesic.WGS84.Inverse(currentRCell.getMeanLat(), currentRCell
+                                .getMeanLong(),
                         inputLat, inputLong, GeodesicMask.DISTANCE);
 
                 Double currentDistance = geodesicData.s12;
 
-                if(currentDistance < minimumDistance) {
+                if (currentDistance < minimumDistance) {
                     minimumDistance = currentDistance;
                     nearestCell = currentRCell;
                 }

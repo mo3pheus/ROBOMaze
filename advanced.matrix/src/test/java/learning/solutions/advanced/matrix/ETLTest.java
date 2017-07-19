@@ -3,6 +3,7 @@ package learning.solutions.advanced.matrix;
 import learning.solutions.advanced.matrix.domain.RCell;
 import learning.solutions.advanced.matrix.utils.ReinforcementLearnerUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class ETLTest {
     static final String path = "/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt";
 
     public static void main(String[] args) {
-        RCell[][] navGrid = ReinforcementLearnerUtil.loadData(path, 20, 20);
+        RCell[][] navGrid = ReinforcementLearnerUtil.loadData(new File(path), 20, 20);
 
         try {
            int id =  ReinforcementLearnerUtil.findNearestRCell(navGrid, 39.9075000, 116.3972300);

@@ -1,0 +1,23 @@
+[0m[[0minfo[0m] [0mPackaging /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/scalatraining_2.12-1.0.jar ...[0m
+[0m[[0mdebug[0m] [0mInput file mappings:[0m
+[0m[[0mdebug[0m] [0m	com/egen/training/ScalaTraining$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/training/ScalaTraining$delayedInit$body.class[0m
+[0m[[0mdebug[0m] [0m	com/egen[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen[0m
+[0m[[0mdebug[0m] [0m	com/egen/scala[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/scala[0m
+[0m[[0mdebug[0m] [0m	com/egen/training[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/training[0m
+[0m[[0mdebug[0m] [0m	com/egen/scala/Employee.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/scala/Employee.class[0m
+[0m[[0mdebug[0m] [0m	com/egen/scala/EmployeeManager.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/scala/EmployeeManager.class[0m
+[0m[[0mdebug[0m] [0m	com/egen/training/ScalaTraining.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/training/ScalaTraining.class[0m
+[0m[[0mdebug[0m] [0m	com[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com[0m
+[0m[[0mdebug[0m] [0m	com/egen/training/ScalaTraining$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/training/ScalaTraining$.class[0m
+[0m[[0mdebug[0m] [0m	com/egen/scala/Employee$.class[0m
+[0m[[0mdebug[0m] [0m	  /Users/sanketkorgaonkar/Documents/workspace/robo.maze.class/ScalaTraining/target/scala-2.12/classes/com/egen/scala/Employee$.class[0m
+[0m[[0minfo[0m] [0mDone packaging.[0m

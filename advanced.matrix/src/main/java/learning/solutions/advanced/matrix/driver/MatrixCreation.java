@@ -13,6 +13,7 @@ import org.apache.log4j.Priority;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +36,7 @@ public class MatrixCreation {
         java.util.List<Point> captureExploration = new ArrayList<>();
 //        ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig());
 
-        ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig(), true);
+        ReinforcementLearner learner = new ReinforcementLearner(getMatrixConfig(), new File("/dataYOLO_output.txt"));
         learner.configureLearner(0.4d, 0.99d);
 
         int sourceX = Integer

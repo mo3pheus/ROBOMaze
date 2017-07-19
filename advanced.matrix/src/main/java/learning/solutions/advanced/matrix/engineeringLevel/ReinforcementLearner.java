@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observable;
@@ -22,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Created by sanket on 5/23/17.
  */
-public class ReinforcementLearner extends Observable{
+public class ReinforcementLearner extends Observable {
     public static final String RL_ENGINE_PREFIX = "mars.rover.rlEngine";
 
     private Logger logger = LoggerFactory.getLogger(ReinforcementLearner.class);
@@ -47,11 +48,9 @@ public class ReinforcementLearner extends Observable{
     private int    normalReward  = 0;
     private int    maxIterations = 0;
 
-//    private final String path = "/Users/schampakaram/DataScience_POCS/Uber_POC/Trajectory_DataSet/Clusters/dataYOLO_output.txt";
-
-    private final String path = null; // TODO: Update path
-    private final int RCELL_ROWS = 20;
-    private final int RCELL_COLUMNS = 20;
+    private       File clusterFile   = null;
+    private final int  RCELL_ROWS    = 20;
+    private final int  RCELL_COLUMNS = 20;
 
     public ReinforcementLearner(Properties mazeDefinition) {
         this.mazeDefinition = mazeDefinition;
@@ -71,7 +70,7 @@ public class ReinforcementLearner extends Observable{
         configureAdjacency();
     }
 
-    public ReinforcementLearner(Properties mazeDefinition, boolean WITH_ETL) {
+    public ReinforcementLearner(Properties mazeDefinition, File clusterFile) {
         this.mazeDefinition = mazeDefinition;
 
         this.frameWidth = Integer.parseInt(mazeDefinition.getProperty(EnvironmentUtils.FRAME_WIDTH_PROPERTY));
@@ -85,8 +84,8 @@ public class ReinforcementLearner extends Observable{
         this.maxReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".maxReward"));
         this.normalReward = Integer.parseInt(mazeDefinition.getProperty(RL_ENGINE_PREFIX + ".normalReward"));
 
-        Objects.requireNonNull(path, "Assign the path that refers to the location of the Cluster File !!!");
-        populateGridWithEtl(path, RCELL_ROWS, RCELL_COLUMNS);
+        Objects.requireNonNull(clusterFile, "Assign the path that refers to the location of the Cluster File !!!");
+        populateGridWithEtl(clusterFile, RCELL_ROWS, RCELL_COLUMNS);
     }
 
     public WallBuilder getWallBuilder() {
@@ -122,6 +121,15 @@ public class ReinforcementLearner extends Observable{
         }
         logger.info(" rlEngine logging totalExplorationSteps = " + explorationSteps);
         this.notifyObservers();
+    }
+
+    private final String getClusterFilePath() {
+        String path = this.getClass().getResource("/dataYOLO_output.txt").getPath();
+
+        if (path == null) {
+            System.out.println("Does not work");
+        }
+        return path;
     }
 
     @Deprecated
@@ -228,9 +236,8 @@ public class ReinforcementLearner extends Observable{
 
     private void populateGrid() {
         int numCells = frameWidth / cellWidth;
-//        navGrid =
+        int id       = 0;
 
-        int id = 0;
         for (int i = 0; i < numCells; i++) {
             for (int j = 0; j < numCells; j++) {
                 Point point = new Point(i * cellWidth, j * cellWidth);
@@ -245,7 +252,7 @@ public class ReinforcementLearner extends Observable{
         }
     }
 
-    private void populateGridWithEtl(String pathToDataFile, final int RCELL_ROWS, final int RCELL_COLUMNS) {
+    private void populateGridWithEtl(File pathToDataFile, final int RCELL_ROWS, final int RCELL_COLUMNS) {
         navGrid = ReinforcementLearnerUtil.loadData(pathToDataFile, RCELL_ROWS, RCELL_COLUMNS);
     }
 
