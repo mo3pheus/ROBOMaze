@@ -62,7 +62,7 @@
 				<configuration>
 					<!-- <protocExecutable>/usr/bin/protoc</protocExecutable> -->
                     <!-- protocExecutable>/Users/schampakaram/protoc-3.2.0-osx/bin/protoc</protocExecutable> -->
-                    <protocExecutable>/Users/sanketkorgaonkar/Documents/protoc-3/bin/protoc</protocExecutable>
+                    <protocExecutable>/Users/jmalakalapalli/Documents/protoc-3/bin/protoc</protocExecutable>
 				</configuration>
 				<executions>
 					<execution>

@@ -5,6 +5,7 @@ package learning.solutions.advanced.matrix.domain;
  */
 
 import learning.solutions.advanced.matrix.utils.LatLongID;
+import learning.solutions.advanced.matrix.utils.RideShareUtil;
 
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -90,7 +91,7 @@ public class RCell {
         this.stdDevLong = Double.parseDouble(parts[etlSchema.STD_DEV_LONG.getValue()]);
         this.id = Integer.parseInt(parts[etlSchema.CLASS_ID.getValue()]);
 
-        this.center = new Point(0,0);
+        this.center = RideShareUtil.getXYCoordinates(this.meanLat, this.meanLong);
     }
 
 
