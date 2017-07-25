@@ -129,9 +129,6 @@ public class ReinforcementLearnerUtil {
             while (centroidString != null) {
                 RCell rCell = new RCell(centroidString);
                 rCellGrid.add(rCell);
-                System.out.println(" Iteration number = " + i++);
-                System.out.println(centroidString);
-                System.out.println(rCell);
                 centroidString = bufferedReader.readLine();
             }
 
@@ -188,8 +185,6 @@ public class ReinforcementLearnerUtil {
 
         Double width  = widthGeodesic.s12;
         Double height = heightGeodesic.s12;
-        System.out.println("Width: " + width / PER_MILE);
-        System.out.println("Height: " + height / PER_MILE);
 
         Double unitWidth  = Math.floor(width / RCELL_ROWS);
         Double unitHeight = Math.floor(height / RCELL_COLUMNS);
@@ -264,23 +259,6 @@ public class ReinforcementLearnerUtil {
                 id = id + randomNumber;
             }
         }
-
-        System.out.println("------------------------------------------------ PRINTING THE MATRIX " +
-                "------------------------------------------------");
-        for (int i = size - 1; i >= 0; i--) {
-            System.out.println();
-            for (int j = 0; j < size; j++) {
-                System.out.print("|");
-                System.out.print(" ");
-                System.out.print(toReturn[i][j].getLatLongIdentifier().getIdentifier() + ", " + toReturn[i][j].getId
-                        () + "," + i + "-" + j);
-                System.out.print(" ");
-            }
-            System.out.print("|");
-            System.out.println();
-        }
-        System.out.println("------------------------------------------------ END OF MATRIX " +
-                "------------------------------------------------");
 
         // Compute adjacency!
         for (int i = 0; i < size; i++) {
@@ -378,5 +356,21 @@ public class ReinforcementLearnerUtil {
         }
 
         return nearestCell.getId();
+    }
+
+    public static RCell getCellForId(RCell[][] navGrid, int cellId) {
+        int size = navGrid.length;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                RCell currentRCell = navGrid[i][j];
+
+                if (currentRCell.getId() == cellId) {
+                    return currentRCell;
+                }
+            }
+        }
+
+        return null;
     }
 }

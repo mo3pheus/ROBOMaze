@@ -101,18 +101,20 @@ public class ReinforcementLearner extends Observable {
     }
 
     public void train(Point source) {
-        logger.info(" rlEngine training triggered at SCET = " + System.currentTimeMillis() + " source = " + source
-                .toString());
-        this.source = ReinforcementLearnerUtil.findPoint(source, navGrid);
+        if (source != null) {
+            logger.info(" rlEngine training triggered at SCET = " + System.currentTimeMillis() + " source = " + source
+                    .toString());
+            this.source = ReinforcementLearnerUtil.findPoint(source, navGrid);
+        }
 
         for (int i = 0; i < maxIterations; i++) {
             RCell current = ReinforcementLearnerUtil.getRandomSource(navGrid);
             //episode
-            while (!(current.getReward() >= maxReward)) {
+            while (!(current.recalculateRewardValue() >= maxReward)) {
                 RCell  temp      = current.getRandomAction();
                 RCell  next      = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
                 double maxQ      = next.getBestAction().getqValue();
-                double newQValue = (1.0d - alpha) * current.getqValue() + alpha * (next.getReward() + gamma * maxQ);
+                double newQValue = (1.0d - alpha) * current.getqValue() + alpha * (next.recalculateRewardValue() + gamma * maxQ);
                 temp.setqValue(newQValue);
                 current = next;
                 explorationSteps++;
