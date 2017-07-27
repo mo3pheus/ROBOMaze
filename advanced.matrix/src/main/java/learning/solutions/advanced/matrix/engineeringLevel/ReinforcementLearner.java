@@ -174,6 +174,10 @@ public class ReinforcementLearner extends Observable {
     }
 
     public java.util.List<Point> getShortestPath() {
+        return getShortestPath(source);
+    }
+
+    public java.util.List<Point> getShortestPath(RCell source) {
         java.util.List<Point> shortestPath = new ArrayList<>();
 
         RCell temp = source;
