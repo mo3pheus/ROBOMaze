@@ -110,7 +110,7 @@ public class ReinforcementLearner extends Observable {
         for (int i = 0; i < maxIterations; i++) {
             RCell current = ReinforcementLearnerUtil.getRandomSource(navGrid);
             //episode
-            while (!(current.recalculateRewardValue() >= maxReward)) {
+            while (!(current.recalculateRewardValue() >= maxReward) && explorationSteps < navGrid.length*navGrid.length*10) {
                 RCell  temp      = current.getRandomAction();
                 RCell  next      = ReinforcementLearnerUtil.findPoint(temp.getCenter(), navGrid);
                 double maxQ      = next.getBestAction().getqValue();
@@ -123,6 +123,11 @@ public class ReinforcementLearner extends Observable {
         }
         logger.info(" rlEngine logging totalExplorationSteps = " + explorationSteps);
         this.notifyObservers();
+        this.clearChanged();
+    }
+
+    public void navGridUpdated() {
+        this.setChanged();
     }
 
     private final String getClusterFilePath() {
@@ -193,6 +198,31 @@ public class ReinforcementLearner extends Observable {
 
             RCell bestAction = temp.getBestAction();
             temp = ReinforcementLearnerUtil.findPoint(bestAction.getCenter(), navGrid);
+            i++;
+
+            if (i == maxIterations * 10) {
+                logger.error(" Could not find path between " + source.toString() + " and destination");
+                return shortestPath;
+            }
+            System.out.println("i = " + i);
+        }
+    }
+
+    public java.util.List<RCell> getShortestPathGrid(RCell source) {
+        java.util.List<RCell> shortestPath = new ArrayList<>();
+
+        RCell bestAction = source;
+        int   i    = 0;
+        while (true) {
+            if (!shortestPath.contains(bestAction)) {
+                shortestPath.add(bestAction);
+            }
+
+            if (bestAction.recalculateRewardValue() >= maxReward) {
+                return shortestPath;
+            }
+
+            bestAction = bestAction.getBestAction();
             i++;
 
             if (i == maxIterations * 10) {

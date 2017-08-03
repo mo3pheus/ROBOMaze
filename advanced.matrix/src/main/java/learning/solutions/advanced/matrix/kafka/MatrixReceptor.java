@@ -56,7 +56,7 @@ public class MatrixReceptor extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Listening ...");
+		System.out.println("MatrixReceptor is Listening ...");
 		Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
 		topicCountMap.put(TOPIC, new Integer(1));
 		Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumerConnector
@@ -66,7 +66,6 @@ public class MatrixReceptor extends Thread {
 		while (it.hasNext())
 			try {
 				MatrixCall received = (MatrixCall.parseFrom(it.next().message()));
-				System.out.println(received);
 
 				if (received.getMessageType() == 2) {
 					NavigationPath navPath = (NavigationPath) SerializationUtil
