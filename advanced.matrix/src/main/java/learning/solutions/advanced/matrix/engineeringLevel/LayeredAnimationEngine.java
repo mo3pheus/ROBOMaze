@@ -66,19 +66,25 @@ public class LayeredAnimationEngine {
 		}
 	}
 
+	public void renderStaticFrame(){
+		JLayeredPane contentPane = getContent();
+		frame.setContentPane(contentPane);
+		frame.setVisible(true);
+	}
+
 	private JLayeredPane getContent() {
 		JLayeredPane matrixPane = new JLayeredPane();
 		List<Component> content = new ArrayList<Component>();
 
 		Grid grid = new Grid(matrixConfig);
-		WallBuilder wallBuilder = new WallBuilder(matrixConfig);
-		Cell destinationCell = new Cell(matrixConfig);
-		Cell startingCell = getStartLocation(matrixConfig);
+		//WallBuilder wallBuilder = new WallBuilder(matrixConfig);
+		//Cell destinationCell = new Cell(matrixConfig);
+		//Cell startingCell = getStartLocation(matrixConfig);
 
 		content.add(grid);
-		content.add(wallBuilder);
-		content.add(startingCell);
-		content.add(destinationCell);
+		//content.add(wallBuilder);
+		//content.add(startingCell);
+		//content.add(destinationCell);
 
 		for (int i = 0; i < content.size(); i++) {
 			matrixPane.add(content.get(i), new Integer(i));

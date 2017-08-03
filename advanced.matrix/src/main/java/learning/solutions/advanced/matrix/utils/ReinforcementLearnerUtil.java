@@ -129,9 +129,6 @@ public class ReinforcementLearnerUtil {
             while (centroidString != null) {
                 RCell rCell = new RCell(centroidString);
                 rCellGrid.add(rCell);
-                System.out.println(" Iteration number = " + i++);
-                System.out.println(centroidString);
-                System.out.println(rCell);
                 centroidString = bufferedReader.readLine();
             }
 
@@ -180,25 +177,23 @@ public class ReinforcementLearnerUtil {
 
         System.out.println(String.format("[minLat = %f, minLong = %f] [maxLat = %f, maxLong = %f]", minLat, minLong,
                 maxLat, maxLong));
-        GeodesicData widthGeodesic = Geodesic.WGS84.Inverse(minLat, minLong, minLat, maxLong,
+        GeodesicData widthGeodesic = Geodesic.WGS84.Inverse(maxLat, minLong, maxLat, maxLong,
                 GeodesicMask.DISTANCE);
 
-        GeodesicData heightGeodesic = Geodesic.WGS84.Inverse(minLat, minLong, maxLat, minLong,
+        GeodesicData heightGeodesic = Geodesic.WGS84.Inverse(maxLat, minLong, minLat, minLong,
                 GeodesicMask.DISTANCE);
 
         Double width  = widthGeodesic.s12;
         Double height = heightGeodesic.s12;
-        System.out.println("Width: " + width / PER_MILE);
-        System.out.println("Height: " + height / PER_MILE);
 
         Double unitWidth  = Math.floor(width / RCELL_ROWS);
         Double unitHeight = Math.floor(height / RCELL_COLUMNS);
 
         // Build the width section of the matrix
         java.util.List<LatLongID> widthSections = new LinkedList<>();
-        widthSections.add(new LatLongID(minLat, minLong, 'x', 0));
+        widthSections.add(new LatLongID(maxLat, minLong, 'x', 0));
 
-        GeodesicData nextUnitWidth = Geodesic.WGS84.Direct(minLat, minLong, EAST, unitWidth);
+        GeodesicData nextUnitWidth = Geodesic.WGS84.Direct(maxLat, minLong, EAST, unitWidth);
         widthSections.add(new LatLongID(nextUnitWidth.lat2, nextUnitWidth.lon2, 'x', 1));
 
         int x = 2;
@@ -212,15 +207,15 @@ public class ReinforcementLearnerUtil {
 
         // Build height section of the matrix
         java.util.List<LatLongID> heightSections = new LinkedList<>();
-        heightSections.add(new LatLongID(minLat, minLong, 'y', 0));
+        heightSections.add(new LatLongID(maxLat, minLong, 'y', 0));
 
-        GeodesicData nextUnitHeight = Geodesic.WGS84.Direct(minLat, minLong, NORTH, unitHeight);
+        GeodesicData nextUnitHeight = Geodesic.WGS84.Direct(maxLat, minLong, SOUTH, unitHeight);
         heightSections.add(new LatLongID(nextUnitHeight.lat2, nextUnitHeight.lon2, 'y', 1));
 
         int y = 2;
-        while (nextUnitHeight.lat2 < maxLat) {
-            nextUnitHeight = Geodesic.WGS84.Direct(nextUnitHeight.lat2, nextUnitHeight.lon2, NORTH, unitHeight);
-            if (nextUnitHeight.lat2 < maxLat) {
+        while (nextUnitHeight.lat2 > minLat) {
+            nextUnitHeight = Geodesic.WGS84.Direct(nextUnitHeight.lat2, nextUnitHeight.lon2, SOUTH, unitHeight);
+            if (nextUnitHeight.lat2 > minLat) {
                 heightSections.add(new LatLongID(nextUnitHeight.lat2, nextUnitHeight.lon2, 'y', y));
                 y++;
             }
@@ -256,31 +251,20 @@ public class ReinforcementLearnerUtil {
                         .getIndex()
                         , yCoOrdinate.getPrefix(), yCoOrdinate.getIndex(), ID);
 
-                RCell currentRcell = new RCell(latitude, longitude, currentLatLongID, id);
+                try {
+                    Point point = new Point(j * 50, i * 50);
+                    RCell currentRcell = new RCell(point, latitude, longitude, currentLatLongID, id);
 
-                idrCellMap.put(currentLatLongID.getIdentifier(), currentRcell);
-                toReturn[i][j] = currentRcell;
+                    idrCellMap.put(currentLatLongID.getIdentifier(), currentRcell);
+                    toReturn[i][j] = currentRcell;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 id = id + randomNumber;
             }
         }
-
-        System.out.println("------------------------------------------------ PRINTING THE MATRIX " +
-                "------------------------------------------------");
-        for (int i = size - 1; i >= 0; i--) {
-            System.out.println();
-            for (int j = 0; j < size; j++) {
-                System.out.print("|");
-                System.out.print(" ");
-                System.out.print(toReturn[i][j].getLatLongIdentifier().getIdentifier() + ", " + toReturn[i][j].getId
-                        () + "," + i + "-" + j);
-                System.out.print(" ");
-            }
-            System.out.print("|");
-            System.out.println();
-        }
-        System.out.println("------------------------------------------------ END OF MATRIX " +
-                "------------------------------------------------");
 
         // Compute adjacency!
         for (int i = 0; i < size; i++) {
@@ -378,5 +362,21 @@ public class ReinforcementLearnerUtil {
         }
 
         return nearestCell.getId();
+    }
+
+    public static RCell getCellForId(RCell[][] navGrid, int cellId) {
+        int size = navGrid.length;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                RCell currentRCell = navGrid[i][j];
+
+                if (currentRCell.getId() == cellId) {
+                    return currentRCell;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -8,7 +8,11 @@ import learning.solutions.advanced.matrix.utils.LatLongID;
 import learning.solutions.advanced.matrix.utils.RideShareUtil;
 
 import java.awt.*;
+import java.lang.Double;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by sanket on 5/23/17.
@@ -52,13 +56,50 @@ public class RCell {
 
     private double meanLat    = 0.0d;
     private double meanLong   = 0.0d;
-
+    private Long threshold = TimeUnit.MINUTES.toMillis(5);
     public double getMeanLat() {
         return meanLat;
     }
 
     public double getMeanLong() {
         return meanLong;
+    }
+
+    private List<Long> rewardTimestamps = new ArrayList<>();
+    private List<Long> penaltyTimestamps = new ArrayList<>();
+    private double customerCallReward = 10.0d;
+    private double trafficDelayReward = -10.0d;
+
+    public double recalculateRewardValue() {
+        purgeExpiredPenaltyTimes();
+        purgeExpiredRewardTimes();
+        return reward + rewardTimestamps.size() * customerCallReward - penaltyTimestamps.size() * trafficDelayReward;
+    }
+
+    public void purgeExpiredRewardTimes() {
+        Long currentTime = System.currentTimeMillis();
+        java.util.List<Long> newRewardTimes = new ArrayList<>();
+
+        for (Long time: rewardTimestamps) {
+            if ((currentTime - time) <= threshold) {
+                newRewardTimes.add(time);
+            }
+        }
+
+        rewardTimestamps = newRewardTimes;
+    }
+
+    public void purgeExpiredPenaltyTimes() {
+        Long currentTime = System.currentTimeMillis();
+        java.util.List<Long> newPenaltyTimes = new ArrayList<>();
+
+        for (Long time: penaltyTimestamps) {
+            if ((currentTime - time) <= threshold) {
+                newPenaltyTimes.add(time);
+            }
+        }
+
+        penaltyTimestamps = newPenaltyTimes;
     }
 
     private double stdDevLat  = 0.0d;
@@ -91,7 +132,7 @@ public class RCell {
         this.stdDevLong = Double.parseDouble(parts[etlSchema.STD_DEV_LONG.getValue()]);
         this.id = Integer.parseInt(parts[etlSchema.CLASS_ID.getValue()]);
 
-        this.center = RideShareUtil.getXYCoordinates(this.meanLat, this.meanLong);
+        this.center = new Point(0,0);
     }
 
 
@@ -119,12 +160,12 @@ public class RCell {
         this.stdDevLong = stdDevLong;
     }
 
-    public RCell(Double latitude, Double longitude, LatLongID latLongIdentifier, int id) {
+    public RCell(Point point, Double latitude, Double longitude, LatLongID latLongIdentifier, int id) throws Exception {
         this.meanLat = latitude;
         this.meanLong = longitude;
         this.latLongIdentifier = latLongIdentifier;
         this.id = id;
-        this.center = new Point(0,0);
+        this.center = point;
     }
 
     public double getqValue() {
@@ -197,6 +238,14 @@ public class RCell {
             tries++;
         }
         return adjacentNodes[id];
+    }
+
+    public void addCustomerCall() {
+        this.rewardTimestamps.add(System.currentTimeMillis());
+    }
+
+    public void addTrafficDelay() {
+        this.penaltyTimestamps.add(System.currentTimeMillis());
     }
 }
 

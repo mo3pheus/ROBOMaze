@@ -36,7 +36,7 @@ public class MatrixCreation {
         java.util.List<Point> captureExploration = new ArrayList<>();
 //        ReinforcementLearner  learner            = new ReinforcementLearner(getMatrixConfig());
 
-        ReinforcementLearner learner = new ReinforcementLearner(getMatrixConfig(), new File("/dataYOLO_output.txt"));
+        ReinforcementLearner learner = new ReinforcementLearner(getMatrixConfig(), new File("/Users/jmalakalapalli/projects/ROBOMaze/advanced.matrix/src/main/resources/dataYOLO_output.txt"));
         learner.configureLearner(0.4d, 0.99d);
 
         int sourceX = Integer
@@ -94,13 +94,13 @@ public class MatrixCreation {
     }
 
     private static Color getHeatMapColor(double score, double maxScore) {
-        if (score < 0.0d) {
+        if (score < maxScore / 5) {
             return Color.black;
-        } else if (score > 0.0d && score < 2.5d) {
+        } else if (score >= maxScore / 5 && score < 2 * (maxScore / 5)) {
             return Color.red;
-        } else if (score > 2.5d && score < 10.0d) {
+        } else if (score >= 2 * (maxScore / 5) && score < 3 * (maxScore / 5)) {
             return Color.orange;
-        } else if (score > 10.0d && score < 20.0d) {
+        } else if (score >= 3 * (maxScore / 5) && score < 4 * (maxScore / 5)) {
             return Color.yellow;
         } else {
             return Color.white;
@@ -122,5 +122,58 @@ public class MatrixCreation {
         matrixConfig = new Properties();
         matrixConfig.load(propFile);
         return matrixConfig;
+    }
+
+
+    public void drawHeatMap(ReinforcementLearner learner) throws IOException{
+        MatrixArchitect matrixArchitect = new MatrixArchitect(getMatrixConfig());
+
+        Map<Point, Double> heatMap = new HashMap<>();
+        RCell[][]          navGrid = learner.getNavGrid();
+        for (int i = 0; i < navGrid[0].length; i++) {
+            for (int j = 0; j < navGrid[0].length; j++) {
+                RCell best = navGrid[i][j].getBestAction();
+                if (heatMap.get(best.getCenter()) != null) {
+                    Double score = heatMap.get(best.getCenter());
+                    heatMap.put(best.getCenter(), score + best.getqValue());
+                } else {
+                    heatMap.put(best.getCenter(), best.getqValue());
+                }
+            }
+        }
+
+        double   maxScore = 0.0d;
+        Point    maxPoint = new Point(100, 200);
+        double[] scores   = new double[heatMap.keySet().size()];
+        int      i        = 0;
+        for (Point current : heatMap.keySet()) {
+            scores[i] = heatMap.get(current).doubleValue();
+            if (heatMap.get(current) > maxScore) {
+                maxScore = heatMap.get(current).doubleValue();
+                maxPoint = current;
+            }
+        }
+        System.out.println(" Max Score is = " + maxScore + " for point = " + maxPoint.toString());
+
+        JLayeredPane      contentPane  = matrixArchitect.getSurface().getLayeredPane();
+        Map<Point, Color> heatColorMap = new HashMap<>();
+        for (int j = 0; j < navGrid[0].length; j++) {
+            for (int k = 0; k < navGrid[0].length; k++) {
+                Point point = navGrid[j][k].getCenter();
+                if (heatMap.containsKey(point)) {
+                    heatColorMap.put(point, getHeatMapColor(heatMap.get(point).intValue(), maxScore));
+                } else {
+                    heatColorMap.put(point, Color.black);
+                }
+                Cell cell = new Cell(matrixConfig);
+                cell.setLocation(point);
+                cell.setColor(heatColorMap.get(point));
+                cell.setCellWidth(Integer.parseInt(matrixConfig.getProperty(EnvironmentUtils.CELL_WIDTH_PROPERTY)));
+                contentPane.add(cell, new Integer(200));
+                System.out.println(" Current = " + point.toString() + " Count = " + heatMap.get(point) + " Color " +
+                        "returned = " + heatColorMap.get(point).toString());
+            }
+        }
+        matrixArchitect.getSurface().repaint();
     }
 }

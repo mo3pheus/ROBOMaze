@@ -34,6 +34,7 @@ public class MatrixArchitect {
         matrixWorld.setSize(frameWidth, frameHeight);
         matrixWorld.setTitle("Matrix");
         this.animationEngine = new LayeredAnimationEngine(matrixConfig, matrixWorld);
+        animationEngine.renderStaticFrame();
     }
 
     public void updateRobotPositions(List<Point> robotPath) {
