@@ -175,8 +175,6 @@ public class ReinforcementLearnerUtil {
 
         }
 
-        System.out.println(String.format("[minLat = %f, minLong = %f] [maxLat = %f, maxLong = %f]", minLat, minLong,
-                maxLat, maxLong));
         GeodesicData widthGeodesic = Geodesic.WGS84.Inverse(minLat, minLong, minLat, maxLong,
                 GeodesicMask.DISTANCE);
 
@@ -306,23 +304,7 @@ public class ReinforcementLearnerUtil {
             }
         }
 
-        // Print all the lat long values
-
-        int blah = 0;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (blah < 240000000) {
-                    System.out.println(toReturn[i][j].getMeanLat() + "," + toReturn[i][j].getMeanLong());
-                }
-                blah++;
-            }
-        }
-
         return toReturn;
-    }
-
-    private static void print(java.util.List<LatLongID> inputList) {
-        inputList.forEach(input -> System.out.println(input.getLatitude() + "," + input.getLongitude()));
     }
 
     public static int findNearestRCell(RCell[][] navGrid, Double inputLat, Double inputLong) throws Exception {
